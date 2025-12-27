@@ -10,13 +10,10 @@ export const useLogin = () => {
 
   return useMutation({
     mutationFn: async (credentials: LoginCredentials) => {
-      const response = await api.post<ApiResponse<AuthResponse>>(
-        '/auth/login',
-        credentials
-      );
+      const response = await api.post<ApiResponse<AuthResponse>>('/auth/login', credentials);
       return response.data.data!;
     },
-    onSuccess: (data) => {
+    onSuccess: data => {
       // Salvar autenticação
       setAuth(data.token, data.user);
 
@@ -38,13 +35,10 @@ export const useRegister = () => {
 
   return useMutation({
     mutationFn: async (data: RegisterData) => {
-      const response = await api.post<ApiResponse<AuthResponse>>(
-        '/auth/register',
-        data
-      );
+      const response = await api.post<ApiResponse<AuthResponse>>('/auth/register', data);
       return response.data.data!;
     },
-    onSuccess: (data) => {
+    onSuccess: data => {
       // Salvar autenticação
       setAuth(data.token, data.user);
 
@@ -82,9 +76,7 @@ export const useMe = () => {
   return useQuery({
     queryKey: ['me'],
     queryFn: async () => {
-      const response = await api.get<ApiResponse<{ user: any; tenant: any }>>(
-        '/auth/me'
-      );
+      const response = await api.get<ApiResponse<{ user: any; tenant: any }>>('/auth/me');
       return response.data.data!;
     },
     enabled: !!token,

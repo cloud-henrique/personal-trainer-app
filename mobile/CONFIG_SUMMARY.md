@@ -3,6 +3,7 @@
 ## ✅ Configuração Atual (NativeWind v2)
 
 ### Versões Instaladas
+
 - **NativeWind:** 2.0.11 (estável)
 - **Tailwind CSS:** 3.3.2
 - **Expo:** ~54.0.30
@@ -12,6 +13,7 @@
 ### Arquivos de Configuração
 
 **babel.config.js:**
+
 ```javascript
 module.exports = function (api) {
   api.cache(true);
@@ -23,6 +25,7 @@ module.exports = function (api) {
 ```
 
 **metro.config.js:**
+
 ```javascript
 const { getDefaultConfig } = require('expo/metro-config');
 
@@ -30,20 +33,19 @@ module.exports = getDefaultConfig(__dirname);
 ```
 
 **tailwind.config.js:**
+
 ```javascript
 module.exports = {
-  content: [
-    "./App.{js,jsx,ts,tsx}",
-    "./src/**/*.{js,jsx,ts,tsx}"
-  ],
+  content: ['./App.{js,jsx,ts,tsx}', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {},
   },
   plugins: [],
-}
+};
 ```
 
 **tsconfig.json:**
+
 ```json
 {
   "extends": "expo/tsconfig.base",
@@ -53,10 +55,7 @@ module.exports = {
       "@/*": ["./src/*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+  "include": ["**/*.ts", "**/*.tsx"]
 }
 ```
 
@@ -73,40 +72,35 @@ npx expo start -c
 ## 🎨 Usando NativeWind
 
 ### Classe Estática (NativeWind)
+
 ```tsx
-<View className="flex-1 bg-white p-4">
-  <Text className="text-xl font-bold text-gray-800">
-    Hello World
-  </Text>
+<View className='flex-1 bg-white p-4'>
+  <Text className='text-xl font-bold text-gray-800'>Hello World</Text>
 </View>
 ```
 
 ### Estilo Dinâmico (Inline Style)
+
 ```tsx
 const { theme } = useThemeStore();
 
 <View style={{ backgroundColor: theme.primaryColor }}>
-  <Text style={{ color: theme.primaryColor }}>
-    Themed Text
-  </Text>
-</View>
+  <Text style={{ color: theme.primaryColor }}>Themed Text</Text>
+</View>;
 ```
 
 ### Combinando NativeWind + Inline
+
 ```tsx
-<TouchableOpacity
-  className="rounded-lg py-4 px-6"
-  style={{ backgroundColor: theme.primaryColor }}
->
-  <Text className="text-white font-bold text-center">
-    Button
-  </Text>
+<TouchableOpacity className='rounded-lg py-4 px-6' style={{ backgroundColor: theme.primaryColor }}>
+  <Text className='text-white font-bold text-center'>Button</Text>
 </TouchableOpacity>
 ```
 
 ## ⚠️ Regras Importantes
 
 1. **NÃO use interpolação em className:**
+
    ```tsx
    // ❌ ERRADO
    className={`bg-[${color}]`}
@@ -116,6 +110,7 @@ const { theme } = useThemeStore();
    ```
 
 2. **Valores dinâmicos = inline style:**
+
    ```tsx
    // Use style para cores dinâmicas do tenant
    style={{ backgroundColor: theme.primaryColor }}
@@ -124,12 +119,13 @@ const { theme } = useThemeStore();
 3. **Classes estáticas = className:**
    ```tsx
    // Use className para estilos fixos
-   className="flex-1 bg-white p-4 rounded-lg"
+   className = 'flex-1 bg-white p-4 rounded-lg';
    ```
 
 ## 🔧 Troubleshooting
 
 ### Erro: "expected dynamic type 'boolean'"
+
 **Solução:** Certifique-se de estar usando NativeWind v2 (2.0.11)
 
 ```bash
@@ -139,6 +135,7 @@ npx expo start -c
 ```
 
 ### Styles não aplicam
+
 **Solução:** Limpe o cache
 
 ```bash
@@ -148,6 +145,7 @@ npx expo start -c
 ```
 
 ### TypeScript errors
+
 **Solução:** Verifique tsconfig.json (sem referências a nativewind-env.d.ts)
 
 ## 📱 Estrutura das Telas
@@ -162,18 +160,15 @@ export default function MyScreen() {
   const { theme } = useThemeStore();
 
   return (
-    <View className="flex-1 bg-white p-4">
+    <View className='flex-1 bg-white p-4'>
       {/* Header com cor do tenant */}
-      <Text
-        className="text-2xl font-bold mb-4"
-        style={{ color: theme.primaryColor }}
-      >
+      <Text className='text-2xl font-bold mb-4' style={{ color: theme.primaryColor }}>
         Título
       </Text>
 
       {/* Content com classes NativeWind */}
-      <View className="bg-gray-100 rounded-lg p-4">
-        <Text className="text-gray-800">Content</Text>
+      <View className='bg-gray-100 rounded-lg p-4'>
+        <Text className='text-gray-800'>Content</Text>
       </View>
     </View>
   );

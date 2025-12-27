@@ -54,29 +54,19 @@ export default function RegisterScreen({ navigation }: any) {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      className="flex-1"
-    >
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled"
-      >
-        <View className="flex-1 bg-white px-6 pt-12">
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} className='flex-1'>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }} keyboardShouldPersistTaps='handled'>
+        <View className='flex-1 bg-white px-6 pt-12'>
           {/* Title */}
-          <Text className="text-3xl font-bold text-gray-800 mb-2">
-            Crie sua Conta
-          </Text>
-          <Text className="text-gray-600 mb-8">
-            Configure seu personal trainer
-          </Text>
+          <Text className='text-3xl font-bold text-gray-800 mb-2'>Crie sua Conta</Text>
+          <Text className='text-gray-600 mb-8'>Configure seu personal trainer</Text>
 
           {/* Name Input */}
-          <View className="mb-4">
-            <Text className="text-gray-700 mb-2 font-medium">Nome</Text>
+          <View className='mb-4'>
+            <Text className='text-gray-700 mb-2 font-medium'>Nome</Text>
             <TextInput
-              className="border border-gray-300 rounded-lg px-4 py-3 text-base"
-              placeholder="Seu nome completo"
+              className='border border-gray-300 rounded-lg px-4 py-3 text-base'
+              placeholder='Seu nome completo'
               value={name}
               onChangeText={setName}
               editable={!registerMutation.isPending}
@@ -85,94 +75,82 @@ export default function RegisterScreen({ navigation }: any) {
           </View>
 
           {/* Email Input */}
-          <View className="mb-4">
-            <Text className="text-gray-700 mb-2 font-medium">Email</Text>
+          <View className='mb-4'>
+            <Text className='text-gray-700 mb-2 font-medium'>Email</Text>
             <TextInput
-              className="border border-gray-300 rounded-lg px-4 py-3 text-base"
-              placeholder="seu@email.com"
+              className='border border-gray-300 rounded-lg px-4 py-3 text-base'
+              placeholder='seu@email.com'
               value={email}
               onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
+              keyboardType='email-address'
+              autoCapitalize='none'
               editable={!registerMutation.isPending}
               autoCorrect={false}
             />
           </View>
 
           {/* Slug Input */}
-          <View className="mb-4">
-            <Text className="text-gray-700 mb-2 font-medium">
-              Identificador Único (slug)
-            </Text>
+          <View className='mb-4'>
+            <Text className='text-gray-700 mb-2 font-medium'>Identificador Único (slug)</Text>
             <TextInput
-              className="border border-gray-300 rounded-lg px-4 py-3 text-base"
-              placeholder="seu-personal"
+              className='border border-gray-300 rounded-lg px-4 py-3 text-base'
+              placeholder='seu-personal'
               value={slug}
-              onChangeText={(text) => setSlug(text.toLowerCase())}
-              autoCapitalize="none"
+              onChangeText={text => setSlug(text.toLowerCase())}
+              autoCapitalize='none'
               editable={!registerMutation.isPending}
               autoCorrect={false}
             />
-            <Text className="text-gray-500 text-xs mt-1">
-              Este será seu identificador único (ex: seu-personal)
-            </Text>
+            <Text className='text-gray-500 text-xs mt-1'>Este será seu identificador único (ex: seu-personal)</Text>
           </View>
 
           {/* Password Input */}
-          <View className="mb-4">
-            <Text className="text-gray-700 mb-2 font-medium">Senha</Text>
+          <View className='mb-4'>
+            <Text className='text-gray-700 mb-2 font-medium'>Senha</Text>
             <TextInput
-              className="border border-gray-300 rounded-lg px-4 py-3 text-base"
-              placeholder="••••••••"
+              className='border border-gray-300 rounded-lg px-4 py-3 text-base'
+              placeholder='••••••••'
               value={password}
               onChangeText={setPassword}
               secureTextEntry={true}
               editable={!registerMutation.isPending}
               autoCorrect={false}
-              autoCapitalize="none"
+              autoCapitalize='none'
             />
           </View>
 
           {/* Password Confirmation Input */}
-          <View className="mb-6">
-            <Text className="text-gray-700 mb-2 font-medium">
-              Confirme a Senha
-            </Text>
+          <View className='mb-6'>
+            <Text className='text-gray-700 mb-2 font-medium'>Confirme a Senha</Text>
             <TextInput
-              className="border border-gray-300 rounded-lg px-4 py-3 text-base"
-              placeholder="••••••••"
+              className='border border-gray-300 rounded-lg px-4 py-3 text-base'
+              placeholder='••••••••'
               value={passwordConfirmation}
               onChangeText={setPasswordConfirmation}
               secureTextEntry={true}
               editable={!registerMutation.isPending}
               autoCorrect={false}
-              autoCapitalize="none"
+              autoCapitalize='none'
             />
           </View>
 
           {/* Register Button */}
           <TouchableOpacity
-            className="bg-blue-500 rounded-lg py-4 items-center mb-4"
+            className='bg-blue-500 rounded-lg py-4 items-center mb-4'
             onPress={handleRegister}
             disabled={registerMutation.isPending}
           >
             {registerMutation.isPending ? (
-              <ActivityIndicator color="white" />
+              <ActivityIndicator color='white' />
             ) : (
-              <Text className="text-white font-bold text-lg">
-                Criar Conta
-              </Text>
+              <Text className='text-white font-bold text-lg'>Criar Conta</Text>
             )}
           </TouchableOpacity>
 
           {/* Login Link */}
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Login')}
-            disabled={registerMutation.isPending}
-          >
-            <Text className="text-center text-gray-600">
-              Já tem uma conta?{' '}
-              <Text className="text-blue-500 font-bold">Entre</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')} disabled={registerMutation.isPending}>
+            <Text className='text-center text-gray-600'>
+              Já tem uma conta? <Text className='text-blue-500 font-bold'>Entre</Text>
             </Text>
           </TouchableOpacity>
         </View>

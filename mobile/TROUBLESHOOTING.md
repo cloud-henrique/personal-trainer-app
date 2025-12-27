@@ -21,6 +21,7 @@ npx expo start -c
 ### Solução 2: Verificar Configurações
 
 **babel.config.js** deve estar assim:
+
 ```javascript
 module.exports = function (api) {
   api.cache(true);
@@ -32,6 +33,7 @@ module.exports = function (api) {
 ```
 
 **metro.config.js** deve estar assim:
+
 ```javascript
 const { getDefaultConfig } = require('expo/metro-config');
 
@@ -43,20 +45,17 @@ module.exports = withNativeWind(config, { input: './global.css' });
 ```
 
 **tsconfig.json** deve incluir:
+
 ```json
 {
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "nativewind-env.d.ts",
-    "app.d.ts"
-  ]
+  "include": ["**/*.ts", "**/*.tsx", "nativewind-env.d.ts", "app.d.ts"]
 }
 ```
 
 ### Solução 3: Versões Corretas
 
 Certifique-se de ter estas versões no `package.json`:
+
 ```json
 {
   "dependencies": {
@@ -71,11 +70,13 @@ Certifique-se de ter estas versões no `package.json`:
 Use `style` ao invés de `className` para valores dinâmicos:
 
 **❌ Incorreto:**
+
 ```tsx
 <View className={`bg-[${theme.primaryColor}]`}>
 ```
 
 **✅ Correto:**
+
 ```tsx
 <View style={{ backgroundColor: theme.primaryColor }}>
 ```
@@ -103,6 +104,7 @@ npm list nativewind tailwindcss
 ### "Cannot find module 'nativewind/preset'"
 
 Reinstale o NativeWind:
+
 ```bash
 npm uninstall nativewind
 npm install nativewind@^4.0.1
@@ -111,6 +113,7 @@ npm install nativewind@^4.0.1
 ### "Module not found: Can't resolve './global.css'"
 
 Certifique-se de que `global.css` existe na raiz do projeto mobile:
+
 ```css
 @tailwind base;
 @tailwind components;

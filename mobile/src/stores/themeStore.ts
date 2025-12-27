@@ -24,9 +24,9 @@ const defaultTheme: TenantTheme = {
 
 export const useThemeStore = create<ThemeState>()(
   persist(
-    (set) => ({
+    set => ({
       theme: defaultTheme,
-      setTheme: (theme) => set({ theme }),
+      setTheme: theme => set({ theme }),
       clearTheme: () => set({ theme: defaultTheme }),
     }),
     {

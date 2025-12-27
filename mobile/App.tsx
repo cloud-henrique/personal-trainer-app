@@ -19,7 +19,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AppNavigator />
-      <StatusBar style="auto" />
+      <StatusBar style='auto' />
     </QueryClientProvider>
   );
 }
