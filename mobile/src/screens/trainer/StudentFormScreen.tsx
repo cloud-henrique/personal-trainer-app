@@ -18,12 +18,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { Picker } from '@react-native-picker/picker';
-import {
-  useCreateStudent,
-  useUpdateStudent,
-  useStudent,
-  parseBRDate,
-} from '../../services/studentService';
+import { useCreateStudent, useUpdateStudent, useStudent, parseBRDate } from '../../services/studentService';
 import type { StudentFormData } from '../../types/student';
 
 // Schema de validação
@@ -142,13 +137,8 @@ const StudentFormScreen: React.FC = () => {
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Text className='text-blue-500 text-base'>Cancelar</Text>
         </TouchableOpacity>
-        <Text className='text-lg font-semibold'>
-          {mode === 'create' ? 'Novo Aluno' : 'Editar Aluno'}
-        </Text>
-        <TouchableOpacity
-          onPress={handleSubmit(onSubmit)}
-          disabled={isLoading}
-        >
+        <Text className='text-lg font-semibold'>{mode === 'create' ? 'Novo Aluno' : 'Editar Aluno'}</Text>
+        <TouchableOpacity onPress={handleSubmit(onSubmit)} disabled={isLoading}>
           {isLoading ? (
             <ActivityIndicator size='small' color='#3B82F6' />
           ) : (
@@ -160,9 +150,7 @@ const StudentFormScreen: React.FC = () => {
       <ScrollView className='flex-1 px-4 py-4'>
         {/* Nome */}
         <View className='mb-4'>
-          <Text className='text-sm font-medium text-gray-700 mb-1'>
-            Nome *
-          </Text>
+          <Text className='text-sm font-medium text-gray-700 mb-1'>Nome *</Text>
           <Controller
             control={control}
             name='name'
@@ -176,16 +164,12 @@ const StudentFormScreen: React.FC = () => {
               />
             )}
           />
-          {errors.name && (
-            <Text className='text-red-500 text-xs mt-1'>{errors.name.message}</Text>
-          )}
+          {errors.name && <Text className='text-red-500 text-xs mt-1'>{errors.name.message}</Text>}
         </View>
 
         {/* Email */}
         <View className='mb-4'>
-          <Text className='text-sm font-medium text-gray-700 mb-1'>
-            Email *
-          </Text>
+          <Text className='text-sm font-medium text-gray-700 mb-1'>Email *</Text>
           <Controller
             control={control}
             name='email'
@@ -201,16 +185,12 @@ const StudentFormScreen: React.FC = () => {
               />
             )}
           />
-          {errors.email && (
-            <Text className='text-red-500 text-xs mt-1'>{errors.email.message}</Text>
-          )}
+          {errors.email && <Text className='text-red-500 text-xs mt-1'>{errors.email.message}</Text>}
         </View>
 
         {/* Telefone */}
         <View className='mb-4'>
-          <Text className='text-sm font-medium text-gray-700 mb-1'>
-            Telefone
-          </Text>
+          <Text className='text-sm font-medium text-gray-700 mb-1'>Telefone</Text>
           <Controller
             control={control}
             name='phone'
@@ -229,9 +209,7 @@ const StudentFormScreen: React.FC = () => {
 
         {/* Data de Nascimento */}
         <View className='mb-4'>
-          <Text className='text-sm font-medium text-gray-700 mb-1'>
-            Data de Nascimento
-          </Text>
+          <Text className='text-sm font-medium text-gray-700 mb-1'>Data de Nascimento</Text>
           <Controller
             control={control}
             name='birth_date'
@@ -243,9 +221,7 @@ const StudentFormScreen: React.FC = () => {
                   disabled={isLoading}
                 >
                   <Text className={value ? 'text-gray-900' : 'text-gray-400'}>
-                    {value
-                      ? value.toLocaleDateString('pt-BR')
-                      : 'Selecionar data'}
+                    {value ? value.toLocaleDateString('pt-BR') : 'Selecionar data'}
                   </Text>
                 </TouchableOpacity>
 
@@ -270,19 +246,13 @@ const StudentFormScreen: React.FC = () => {
 
         {/* Gênero */}
         <View className='mb-4'>
-          <Text className='text-sm font-medium text-gray-700 mb-1'>
-            Gênero
-          </Text>
+          <Text className='text-sm font-medium text-gray-700 mb-1'>Gênero</Text>
           <Controller
             control={control}
             name='gender'
             render={({ field: { onChange, value } }) => (
               <View className='border border-gray-300 rounded-lg overflow-hidden'>
-                <Picker
-                  selectedValue={value || ''}
-                  onValueChange={onChange}
-                  enabled={!isLoading}
-                >
+                <Picker selectedValue={value || ''} onValueChange={onChange} enabled={!isLoading}>
                   <Picker.Item label='Não informar' value='' />
                   <Picker.Item label='Masculino' value='male' />
                   <Picker.Item label='Feminino' value='female' />
@@ -295,9 +265,7 @@ const StudentFormScreen: React.FC = () => {
 
         {/* Altura */}
         <View className='mb-4'>
-          <Text className='text-sm font-medium text-gray-700 mb-1'>
-            Altura (cm)
-          </Text>
+          <Text className='text-sm font-medium text-gray-700 mb-1'>Altura (cm)</Text>
           <Controller
             control={control}
             name='height'
@@ -316,9 +284,7 @@ const StudentFormScreen: React.FC = () => {
 
         {/* Condições Médicas */}
         <View className='mb-4'>
-          <Text className='text-sm font-medium text-gray-700 mb-1'>
-            Condições Médicas
-          </Text>
+          <Text className='text-sm font-medium text-gray-700 mb-1'>Condições Médicas</Text>
           <Controller
             control={control}
             name='medical_conditions'
@@ -339,9 +305,7 @@ const StudentFormScreen: React.FC = () => {
 
         {/* Notas */}
         <View className='mb-4'>
-          <Text className='text-sm font-medium text-gray-700 mb-1'>
-            Notas
-          </Text>
+          <Text className='text-sm font-medium text-gray-700 mb-1'>Notas</Text>
           <Controller
             control={control}
             name='notes'
@@ -363,18 +327,12 @@ const StudentFormScreen: React.FC = () => {
         {/* Status Ativo (apenas edit) */}
         {mode === 'edit' && (
           <View className='mb-4 flex-row items-center justify-between'>
-            <Text className='text-sm font-medium text-gray-700'>
-              Aluno Ativo
-            </Text>
+            <Text className='text-sm font-medium text-gray-700'>Aluno Ativo</Text>
             <Controller
               control={control}
               name='is_active'
               render={({ field: { onChange, value } }) => (
-                <Switch
-                  value={value}
-                  onValueChange={onChange}
-                  disabled={isLoading}
-                />
+                <Switch value={value} onValueChange={onChange} disabled={isLoading} />
               )}
             />
           </View>

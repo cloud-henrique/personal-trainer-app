@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  ScrollView,
-  TouchableOpacity,
-  ActivityIndicator,
-  Alert,
-  SafeAreaView,
-} from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, ActivityIndicator, Alert, SafeAreaView } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useStudent, useDeleteStudent } from '../../services/studentService';
@@ -38,26 +30,22 @@ const StudentDetailScreen: React.FC = () => {
 
   const handleDelete = () => {
     setShowMenu(false);
-    Alert.alert(
-      'Excluir Aluno',
-      `Tem certeza que deseja excluir ${student?.name}? Esta ação não pode ser desfeita.`,
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Excluir',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await deleteMutation.mutateAsync(studentId);
-              navigation.goBack();
-            } catch (error: any) {
-              const message = error.response?.data?.message || 'Erro ao excluir aluno';
-              Alert.alert('Erro', message);
-            }
-          },
+    Alert.alert('Excluir Aluno', `Tem certeza que deseja excluir ${student?.name}? Esta ação não pode ser desfeita.`, [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Excluir',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await deleteMutation.mutateAsync(studentId);
+            navigation.goBack();
+          } catch (error: any) {
+            const message = error.response?.data?.message || 'Erro ao excluir aluno';
+            Alert.alert('Erro', message);
+          }
         },
-      ]
-    );
+      },
+    ]);
   };
 
   if (isLoading) {
@@ -71,16 +59,9 @@ const StudentDetailScreen: React.FC = () => {
   if (isError || !student) {
     return (
       <SafeAreaView className='flex-1 bg-white items-center justify-center px-8'>
-        <Text className='text-xl font-semibold text-gray-900 text-center mb-2'>
-          Erro ao carregar aluno
-        </Text>
-        <Text className='text-gray-500 text-center mb-6'>
-          Não foi possível carregar as informações do aluno
-        </Text>
-        <TouchableOpacity
-          onPress={() => refetch()}
-          className='bg-blue-500 px-6 py-3 rounded-lg'
-        >
+        <Text className='text-xl font-semibold text-gray-900 text-center mb-2'>Erro ao carregar aluno</Text>
+        <Text className='text-gray-500 text-center mb-6'>Não foi possível carregar as informações do aluno</Text>
+        <TouchableOpacity onPress={() => refetch()} className='bg-blue-500 px-6 py-3 rounded-lg'>
           <Text className='text-white font-semibold'>Tentar novamente</Text>
         </TouchableOpacity>
       </SafeAreaView>
@@ -103,10 +84,7 @@ const StudentDetailScreen: React.FC = () => {
       {/* Menu Dropdown (Simples) */}
       {showMenu && (
         <View className='absolute top-16 right-4 bg-white rounded-lg shadow-lg border border-gray-200 z-10'>
-          <TouchableOpacity
-            onPress={handleEdit}
-            className='px-4 py-3 border-b border-gray-200'
-          >
+          <TouchableOpacity onPress={handleEdit} className='px-4 py-3 border-b border-gray-200'>
             <Text className='text-blue-500 font-medium'>Editar</Text>
           </TouchableOpacity>
           <TouchableOpacity onPress={handleDelete} className='px-4 py-3'>
@@ -119,26 +97,12 @@ const StudentDetailScreen: React.FC = () => {
         {/* Hero Section */}
         <View className='items-center py-6 bg-gray-50'>
           <Avatar name={student.name} size={80} />
-          <Text className='text-2xl font-bold text-gray-900 mt-4'>
-            {student.name}
-          </Text>
+          <Text className='text-2xl font-bold text-gray-900 mt-4'>{student.name}</Text>
           <Text className='text-gray-500 mt-1'>{student.email}</Text>
-          {student.phone && (
-            <Text className='text-gray-500 mt-0.5'>{student.phone}</Text>
-          )}
-          {student.age && (
-            <Text className='text-gray-500 mt-0.5'>{student.age} anos</Text>
-          )}
-          <View
-            className={`mt-3 px-3 py-1 rounded-full ${
-              student.is_active ? 'bg-green-100' : 'bg-gray-100'
-            }`}
-          >
-            <Text
-              className={`text-sm font-medium ${
-                student.is_active ? 'text-green-700' : 'text-gray-500'
-              }`}
-            >
+          {student.phone && <Text className='text-gray-500 mt-0.5'>{student.phone}</Text>}
+          {student.age && <Text className='text-gray-500 mt-0.5'>{student.age} anos</Text>}
+          <View className={`mt-3 px-3 py-1 rounded-full ${student.is_active ? 'bg-green-100' : 'bg-gray-100'}`}>
+            <Text className={`text-sm font-medium ${student.is_active ? 'text-green-700' : 'text-gray-500'}`}>
               {student.is_active ? 'Ativo' : 'Inativo'}
             </Text>
           </View>
@@ -146,17 +110,13 @@ const StudentDetailScreen: React.FC = () => {
 
         {/* Informações Pessoais */}
         <View className='px-4 py-4'>
-          <Text className='text-lg font-semibold text-gray-900 mb-3'>
-            Informações Pessoais
-          </Text>
+          <Text className='text-lg font-semibold text-gray-900 mb-3'>Informações Pessoais</Text>
 
           {/* Altura */}
           {student.height && (
             <View className='flex-row justify-between py-3 border-b border-gray-200'>
               <Text className='text-gray-600'>Altura</Text>
-              <Text className='text-gray-900 font-medium'>
-                {student.height} cm
-              </Text>
+              <Text className='text-gray-900 font-medium'>{student.height} cm</Text>
             </View>
           )}
 
@@ -164,9 +124,7 @@ const StudentDetailScreen: React.FC = () => {
           {student.gender_label && (
             <View className='flex-row justify-between py-3 border-b border-gray-200'>
               <Text className='text-gray-600'>Gênero</Text>
-              <Text className='text-gray-900 font-medium'>
-                {student.gender_label}
-              </Text>
+              <Text className='text-gray-900 font-medium'>{student.gender_label}</Text>
             </View>
           )}
 
@@ -201,34 +159,25 @@ const StudentDetailScreen: React.FC = () => {
           {student.trainer && (
             <View className='flex-row justify-between py-3 border-t border-gray-200 mt-2'>
               <Text className='text-gray-600'>Personal Trainer</Text>
-              <Text className='text-gray-900 font-medium'>
-                {student.trainer.name}
-              </Text>
+              <Text className='text-gray-900 font-medium'>{student.trainer.name}</Text>
             </View>
           )}
         </View>
 
         {/* Stats (se disponíveis) */}
-        {(student.active_workouts_count !== undefined ||
-          student.active_goals_count !== undefined) && (
+        {(student.active_workouts_count !== undefined || student.active_goals_count !== undefined) && (
           <View className='px-4 py-4 bg-gray-50'>
-            <Text className='text-lg font-semibold text-gray-900 mb-3'>
-              Resumo
-            </Text>
+            <Text className='text-lg font-semibold text-gray-900 mb-3'>Resumo</Text>
             <View className='flex-row'>
               {student.active_workouts_count !== undefined && (
                 <View className='flex-1 bg-white rounded-lg p-4 mr-2'>
-                  <Text className='text-2xl font-bold text-blue-500'>
-                    {student.active_workouts_count}
-                  </Text>
+                  <Text className='text-2xl font-bold text-blue-500'>{student.active_workouts_count}</Text>
                   <Text className='text-gray-600 mt-1'>Treinos Ativos</Text>
                 </View>
               )}
               {student.active_goals_count !== undefined && (
                 <View className='flex-1 bg-white rounded-lg p-4 ml-2'>
-                  <Text className='text-2xl font-bold text-green-500'>
-                    {student.active_goals_count}
-                  </Text>
+                  <Text className='text-2xl font-bold text-green-500'>{student.active_goals_count}</Text>
                   <Text className='text-gray-600 mt-1'>Metas Ativas</Text>
                 </View>
               )}
@@ -239,11 +188,7 @@ const StudentDetailScreen: React.FC = () => {
 
       {/* Botão Editar (Bottom) */}
       <View className='px-4 py-3 border-t border-gray-200'>
-        <TouchableOpacity
-          onPress={handleEdit}
-          className='bg-blue-500 py-3 rounded-lg items-center'
-          activeOpacity={0.8}
-        >
+        <TouchableOpacity onPress={handleEdit} className='bg-blue-500 py-3 rounded-lg items-center' activeOpacity={0.8}>
           <Text className='text-white font-semibold text-base'>Editar Aluno</Text>
         </TouchableOpacity>
       </View>

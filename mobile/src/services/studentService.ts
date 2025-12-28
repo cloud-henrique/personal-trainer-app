@@ -1,11 +1,6 @@
 import { useMutation, useQuery, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
 import { api, ApiResponse } from './api';
-import type {
-  Student,
-  StudentFormData,
-  StudentListParams,
-  PaginatedStudentsResponse
-} from '../types/student';
+import type { Student, StudentFormData, StudentListParams, PaginatedStudentsResponse } from '../types/student';
 
 // ========================================
 // API Functions
@@ -25,9 +20,7 @@ const createStudent = async (studentData: StudentFormData): Promise<Student> => 
   // Converter Date para string no formato dd/mm/yyyy se necessário
   const formattedData = {
     ...studentData,
-    birth_date: studentData.birth_date
-      ? formatDateToBR(studentData.birth_date)
-      : null,
+    birth_date: studentData.birth_date ? formatDateToBR(studentData.birth_date) : null,
   };
 
   const { data } = await api.post<ApiResponse<Student>>('/students', formattedData);
@@ -38,9 +31,7 @@ const updateStudent = async (id: number, studentData: StudentFormData): Promise<
   // Converter Date para string no formato dd/mm/yyyy se necessário
   const formattedData = {
     ...studentData,
-    birth_date: studentData.birth_date
-      ? formatDateToBR(studentData.birth_date)
-      : null,
+    birth_date: studentData.birth_date ? formatDateToBR(studentData.birth_date) : null,
   };
 
   const { data } = await api.put<ApiResponse<Student>>(`/students/${id}`, formattedData);
@@ -80,7 +71,7 @@ export const useStudents = (params: StudentListParams = {}) => {
   return useInfiniteQuery({
     queryKey: ['students', params],
     queryFn: ({ pageParam = 1 }) => fetchStudents({ ...params, page: pageParam }),
-    getNextPageParam: (lastPage) => {
+    getNextPageParam: lastPage => {
       if (lastPage.current_page < lastPage.last_page) {
         return lastPage.current_page + 1;
       }

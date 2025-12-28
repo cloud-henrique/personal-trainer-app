@@ -9,7 +9,10 @@ interface AvatarProps {
 const Avatar: React.FC<AvatarProps> = ({ name, size = 40 }) => {
   // Extrai as iniciais do nome (primeira letra do primeiro e último nome)
   const getInitials = (fullName: string): string => {
-    const words = fullName.trim().split(' ').filter(word => word.length > 0);
+    const words = fullName
+      .trim()
+      .split(' ')
+      .filter(word => word.length > 0);
     if (words.length === 0) return '?';
     if (words.length === 1) return words[0][0].toUpperCase();
     return (words[0][0] + words[words.length - 1][0]).toUpperCase();
@@ -44,14 +47,8 @@ const Avatar: React.FC<AvatarProps> = ({ name, size = 40 }) => {
   const fontSize = size * 0.4; // Tamanho da fonte é 40% do tamanho do avatar
 
   return (
-    <View
-      className={`${bgColor} items-center justify-center rounded-full`}
-      style={{ width: size, height: size }}
-    >
-      <Text
-        className='text-white font-semibold'
-        style={{ fontSize }}
-      >
+    <View className={`${bgColor} items-center justify-center rounded-full`} style={{ width: size, height: size }}>
+      <Text className='text-white font-semibold' style={{ fontSize }}>
         {initials}
       </Text>
     </View>
