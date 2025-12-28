@@ -14,6 +14,8 @@ Aplicação SaaS multi-tenant para personal trainers gerenciarem clientes, trein
 - [x] Laravel Sanctum (autenticação token-based)
 - [x] CORS configurado
 - [x] Logs por channel (students, workouts, auth)
+- [x] Validação backend (Request classes)
+- [x] API Resources (transformers de response)
 
 ### ✅ Mobile (React Native + Expo) - FUNDAÇÃO COMPLETA
 - [x] Estrutura Expo SDK 52 + TypeScript
@@ -26,12 +28,12 @@ Aplicação SaaS multi-tenant para personal trainers gerenciarem clientes, trein
 - [x] Dashboard básico
 - [x] Tema dinâmico por tenant
 
-### 🚧 Em Desenvolvimento
+### 🚧 Próximos Passos
 - [ ] CRUD de Alunos (mobile)
 - [ ] CRUD de Treinos (mobile)
 - [ ] Medições e Gráficos (mobile)
-- [ ] Form Requests (backend)
-- [ ] API Resources (backend)
+- [ ] Push Notifications
+- [ ] Offline-first (fila de mutações)
 
 ## 📁 Estrutura do Projeto
 
@@ -229,11 +231,13 @@ DELETE /api/v1/goals/{id}
 ### Backend
 ✅ Sistema multi-tenant com isolamento por tenant_id
 ✅ Autenticação JWT com Sanctum
-✅ CRUD completo de Students, Workouts, Exercises
+✅ CRUD completo de Students, Workouts, Exercises, Measurements, Goals
 ✅ Sistema de medições e gráficos
 ✅ Sistema de metas
 ✅ Dashboard com estatísticas
 ✅ Logs estruturados por entidade
+✅ Validação com Form Requests
+✅ Respostas padronizadas com API Resources
 
 ### Mobile
 ✅ Login/Registro com tema dinâmico
@@ -309,5 +313,5 @@ Projeto privado - Pulsatrix
 
 ---
 
-**Última atualização:** 27/12/2024
-**Status:** Backend funcional + Mobile foundation completa
+**Última atualização:** 28/12/2024
+**Status:** Backend completo (validações + resources) + Mobile foundation completa

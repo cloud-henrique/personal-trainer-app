@@ -700,8 +700,8 @@ docs: atualiza README
 5. ✅ Controllers (Auth, Student, Workout, Exercise, Measurement, Goal, Dashboard)
 6. ✅ Rotas definidas (routes/api.php completo)
 7. ✅ TenantService criado
-8. [ ] Form Requests (validações estruturadas)
-9. [ ] API Resources (transformers de response)
+8. ✅ Form Requests (validações estruturadas)
+9. ✅ API Resources (transformers de response)
 
 ### Mobile (Alta Prioridade)
 1. ✅ Estrutura base (Expo + NativeWind 4)

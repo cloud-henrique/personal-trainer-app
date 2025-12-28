@@ -7,10 +7,21 @@ import { useAuthStore } from '../stores/authStore';
 import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
 
-// Trainer Screens (placeholder)
+// Trainer Screens
 import DashboardScreen from '../screens/trainer/DashboardScreen';
+import StudentListScreen from '../screens/trainer/StudentListScreen';
+import StudentDetailScreen from '../screens/trainer/StudentDetailScreen';
+import StudentFormScreen from '../screens/trainer/StudentFormScreen';
 
-const Stack = createNativeStackNavigator();
+// Type definitions for navigation
+export type AppStackParamList = {
+  Dashboard: undefined;
+  StudentList: undefined;
+  StudentDetail: { studentId: number };
+  StudentForm: { studentId?: number; mode: 'create' | 'edit' };
+};
+
+const Stack = createNativeStackNavigator<AppStackParamList>();
 
 export default function AppNavigator() {
   const { isAuthenticated } = useAuthStore();
@@ -25,8 +36,11 @@ export default function AppNavigator() {
         </Stack.Navigator>
       ) : (
         // Authenticated Stack
-        <Stack.Navigator>
-          <Stack.Screen name='Dashboard' component={DashboardScreen} options={{ title: 'Dashboard' }} />
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name='Dashboard' component={DashboardScreen} />
+          <Stack.Screen name='StudentList' component={StudentListScreen} />
+          <Stack.Screen name='StudentDetail' component={StudentDetailScreen} />
+          <Stack.Screen name='StudentForm' component={StudentFormScreen} />
         </Stack.Navigator>
       )}
     </NavigationContainer>
