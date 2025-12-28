@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Workout\StoreWorkoutRequest;
 use App\Http\Requests\Workout\UpdateWorkoutRequest;
+use App\Http\Resources\WorkoutResource;
 use App\Models\Workout;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -41,7 +42,7 @@ class WorkoutController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $workouts,
+            'data' => WorkoutResource::collection($workouts),
         ]);
     }
 
@@ -66,7 +67,7 @@ class WorkoutController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $workout->load(['student:id,name', 'creator:id,name']),
+                'data' => new WorkoutResource($workout->load(['student:id,name', 'creator:id,name'])),
                 'message' => 'Treino criado com sucesso',
             ], 201);
 
@@ -98,7 +99,7 @@ class WorkoutController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $workout,
+            'data' => new WorkoutResource($workout),
         ]);
     }
 
@@ -120,7 +121,7 @@ class WorkoutController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $workout->fresh()->load(['student:id,name', 'creator:id,name', 'exercises']),
+                'data' => new WorkoutResource($workout->fresh()->load(['student:id,name', 'creator:id,name', 'exercises'])),
                 'message' => 'Treino atualizado com sucesso',
             ]);
 

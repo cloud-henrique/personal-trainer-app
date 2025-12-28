@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Student\StoreStudentRequest;
 use App\Http\Requests\Student\UpdateStudentRequest;
+use App\Http\Resources\StudentResource;
 use App\Models\Student;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -41,7 +42,7 @@ class StudentController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $students,
+            'data' => StudentResource::collection($students),
         ]);
     }
 
@@ -63,7 +64,7 @@ class StudentController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $student->load('trainer:id,name'),
+                'data' => new StudentResource($student->load('trainer:id,name')),
                 'message' => 'Aluno criado com sucesso',
             ], 201);
 
@@ -95,7 +96,7 @@ class StudentController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $student,
+            'data' => new StudentResource($student),
         ]);
     }
 
@@ -117,7 +118,7 @@ class StudentController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $student->fresh()->load('trainer:id,name'),
+                'data' => new StudentResource($student->fresh()->load('trainer:id,name')),
                 'message' => 'Aluno atualizado com sucesso',
             ]);
 

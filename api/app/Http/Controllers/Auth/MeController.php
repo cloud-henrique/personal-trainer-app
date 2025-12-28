@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -27,15 +28,7 @@ class MeController extends Controller
         return response()->json([
             'success' => true,
             'data' => [
-                'user' => [
-                    'id' => $user->id,
-                    'name' => $user->name,
-                    'email' => $user->email,
-                    'phone' => $user->phone,
-                    'avatar_url' => $user->avatar_url,
-                    'role' => $user->role,
-                    'is_active' => $user->is_active,
-                ],
+                'user' => new UserResource($user),
                 'tenant' => [
                     'id' => $tenant->id,
                     'name' => $tenant->name,

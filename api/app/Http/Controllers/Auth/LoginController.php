@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
@@ -70,13 +71,7 @@ class LoginController extends Controller
                 'success' => true,
                 'data' => [
                     'token' => $token,
-                    'user' => [
-                        'id' => $user->id,
-                        'name' => $user->name,
-                        'email' => $user->email,
-                        'role' => $user->role,
-                        'avatar_url' => $user->avatar_url,
-                    ],
+                    'user' => new UserResource($user),
                     'tenant' => [
                         'id' => $tenant->id,
                         'name' => $tenant->name,

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Resources\UserResource;
 use App\Services\TenantService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -42,12 +43,7 @@ class RegisterController extends Controller
                 'success' => true,
                 'data' => [
                     'token' => $result['token'],
-                    'user' => [
-                        'id' => $result['user']->id,
-                        'name' => $result['user']->name,
-                        'email' => $result['user']->email,
-                        'role' => $result['user']->role,
-                    ],
+                    'user' => new UserResource($result['user']),
                     'tenant' => [
                         'id' => $result['tenant']->id,
                         'name' => $result['tenant']->name,

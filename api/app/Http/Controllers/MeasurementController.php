@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Measurement\StoreMeasurementRequest;
+use App\Http\Resources\StudentMeasurementResource;
 use App\Models\Student;
 use App\Models\StudentMeasurement;
 use Illuminate\Http\JsonResponse;
@@ -30,7 +31,7 @@ class MeasurementController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $measurements,
+            'data' => StudentMeasurementResource::collection($measurements),
         ]);
     }
 
@@ -56,7 +57,7 @@ class MeasurementController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $measurement,
+                'data' => new StudentMeasurementResource($measurement),
                 'message' => 'Avaliação física registrada com sucesso',
             ], 201);
 
@@ -93,7 +94,7 @@ class MeasurementController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $measurement,
+            'data' => new StudentMeasurementResource($measurement),
         ]);
     }
 

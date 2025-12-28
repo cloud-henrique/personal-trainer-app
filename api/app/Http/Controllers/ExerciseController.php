@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Exercise\StoreExerciseRequest;
 use App\Http\Requests\Exercise\UpdateExerciseRequest;
+use App\Http\Resources\ExerciseResource;
 use App\Models\Exercise;
 use App\Models\Workout;
 use Illuminate\Http\JsonResponse;
@@ -47,7 +48,7 @@ class ExerciseController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $exercise,
+                'data' => new ExerciseResource($exercise),
                 'message' => 'Exercício criado com sucesso',
             ], 201);
 
@@ -81,7 +82,7 @@ class ExerciseController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $exercise->fresh(),
+                'data' => new ExerciseResource($exercise->fresh()),
                 'message' => 'Exercício atualizado com sucesso',
             ]);
 

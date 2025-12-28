@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Goal\StoreGoalRequest;
 use App\Http\Requests\Goal\UpdateGoalRequest;
+use App\Http\Resources\GoalResource;
 use App\Models\Goal;
 use App\Models\Student;
 use Illuminate\Http\JsonResponse;
@@ -36,7 +37,7 @@ class GoalController extends Controller
 
         return response()->json([
             'success' => true,
-            'data' => $goals,
+            'data' => GoalResource::collection($goals),
         ]);
     }
 
@@ -63,7 +64,7 @@ class GoalController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $goal,
+                'data' => new GoalResource($goal),
                 'message' => 'Meta criada com sucesso',
             ], 201);
 
@@ -98,7 +99,7 @@ class GoalController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $goal->fresh(),
+                'data' => new GoalResource($goal->fresh()),
                 'message' => 'Meta atualizada com sucesso',
             ]);
 
