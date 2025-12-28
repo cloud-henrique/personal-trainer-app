@@ -24,14 +24,14 @@ import type { StudentFormData } from '../../types/student';
 // Schema de validação
 const studentSchema = z.object({
   name: z.string().min(3, 'Mínimo 3 caracteres').max(255, 'Máximo 255 caracteres'),
-  email: z.email('Email inválido'),
-  phone: z.string().optional().nullable(),
-  birth_date: z.date().optional().nullable(),
-  gender: z.enum(['male', 'female', 'other']).optional().nullable(),
-  height: z.number().min(0).max(999.99).optional().nullable(),
-  medical_conditions: z.string().optional().nullable(),
-  notes: z.string().optional().nullable(),
-  is_active: z.boolean().default(true),
+  email: z.string().email('Email inválido'),
+  phone: z.string().nullable().optional(),
+  birth_date: z.date().nullable().optional(),
+  gender: z.enum(['male', 'female', 'other']).nullable().optional(),
+  height: z.number().min(0).max(999.99).nullable().optional(),
+  medical_conditions: z.string().nullable().optional(),
+  notes: z.string().nullable().optional(),
+  is_active: z.boolean().optional(),
 });
 
 type StudentFormValues = z.infer<typeof studentSchema>;
@@ -69,12 +69,12 @@ const StudentFormScreen: React.FC = () => {
     defaultValues: {
       name: '',
       email: '',
-      phone: '',
+      phone: null,
       birth_date: null,
       gender: null,
       height: null,
-      medical_conditions: '',
-      notes: '',
+      medical_conditions: null,
+      notes: null,
       is_active: true,
     },
   });
@@ -84,12 +84,12 @@ const StudentFormScreen: React.FC = () => {
     if (mode === 'edit' && student) {
       setValue('name', student.name);
       setValue('email', student.email);
-      setValue('phone', student.phone || '');
+      setValue('phone', student.phone || null);
       setValue('birth_date', student.birth_date ? parseBRDate(student.birth_date) : null);
       setValue('gender', student.gender);
       setValue('height', student.height);
-      setValue('medical_conditions', student.medical_conditions || '');
-      setValue('notes', student.notes || '');
+      setValue('medical_conditions', student.medical_conditions || null);
+      setValue('notes', student.notes || null);
       setValue('is_active', student.is_active);
     }
   }, [student, mode, setValue]);
@@ -272,7 +272,14 @@ const StudentFormScreen: React.FC = () => {
             render={({ field: { onChange, value } }) => (
               <TextInput
                 value={value?.toString() || ''}
-                onChangeText={text => onChange(text ? parseFloat(text) : null)}
+                onChangeText={text => {
+                  if (text === '') {
+                    onChange(null);
+                  } else {
+                    const num = parseFloat(text);
+                    onChange(isNaN(num) ? null : num);
+                  }
+                }}
                 placeholder='170'
                 keyboardType='numeric'
                 className='border border-gray-300 rounded-lg px-3 py-2 text-base'
