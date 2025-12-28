@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 /**
  * LoginController
@@ -21,22 +19,12 @@ class LoginController extends Controller
     /**
      * Authenticate user and return token.
      *
-     * @param Request $request
+     * @param LoginRequest $request
      * @return JsonResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(LoginRequest $request): JsonResponse
     {
         try {
-            // Validate request
-            $validator = Validator::make($request->all(), [
-                'email' => 'required|email',
-                'password' => 'required|string',
-            ]);
-
-            if ($validator->fails()) {
-                throw new ValidationException($validator);
-            }
-
             // Find user by email (across all tenants)
             $user = User::withoutGlobalScope('tenant')
                 ->where('email', $request->email)
@@ -101,13 +89,6 @@ class LoginController extends Controller
                 ],
                 'message' => 'Login realizado com sucesso',
             ]);
-
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erro de validação',
-                'errors' => $e->errors(),
-            ], 422);
 
         } catch (\Exception $e) {
             Log::channel('auth')->error('Login failed', [

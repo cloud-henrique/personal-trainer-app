@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\RegisterRequest;
 use App\Services\TenantService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 /**
  * RegisterController
@@ -25,27 +23,14 @@ class RegisterController extends Controller
     /**
      * Register a new tenant with admin user.
      *
-     * @param Request $request
+     * @param RegisterRequest $request
      * @return JsonResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(RegisterRequest $request): JsonResponse
     {
         try {
-            // Validate request
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'email' => 'required|email|unique:tenants,email',
-                'password' => 'required|string|min:8|confirmed',
-                'slug' => 'required|string|alpha_dash|unique:tenants,slug',
-                'phone' => 'nullable|string|max:20',
-            ]);
-
-            if ($validator->fails()) {
-                throw new ValidationException($validator);
-            }
-
             // Create tenant and admin user
-            $result = $this->tenantService->createTenantWithAdmin($request->all());
+            $result = $this->tenantService->createTenantWithAdmin($request->validated());
 
             // Log registration
             Log::channel('auth')->info('Tenant registered', [
@@ -74,13 +59,6 @@ class RegisterController extends Controller
                 ],
                 'message' => 'Cadastro realizado com sucesso',
             ], 201);
-
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erro de validação',
-                'errors' => $e->errors(),
-            ], 422);
 
         } catch (\Exception $e) {
             Log::channel('auth')->error('Registration failed', [

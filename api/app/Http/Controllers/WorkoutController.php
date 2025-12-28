@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Workout\StoreWorkoutRequest;
+use App\Http\Requests\Workout\UpdateWorkoutRequest;
 use App\Models\Workout;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 /**
  * WorkoutController
@@ -48,28 +48,14 @@ class WorkoutController extends Controller
     /**
      * Create a new workout.
      *
-     * @param Request $request
+     * @param StoreWorkoutRequest $request
      * @return JsonResponse
      */
-    public function store(Request $request): JsonResponse
+    public function store(StoreWorkoutRequest $request): JsonResponse
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'student_id' => 'required|exists:students,id',
-                'name' => 'required|string|max:255',
-                'description' => 'nullable|string',
-                'category' => 'required|in:strength,cardio,flexibility,mixed',
-                'starts_at' => 'nullable|date',
-                'ends_at' => 'nullable|date|after:starts_at',
-                'is_active' => 'sometimes|boolean',
-            ]);
-
-            if ($validator->fails()) {
-                throw new ValidationException($validator);
-            }
-
             $workout = Workout::create([
-                ...$request->all(),
+                ...$request->validated(),
                 'created_by' => auth()->id(),
             ]);
 
@@ -83,13 +69,6 @@ class WorkoutController extends Controller
                 'data' => $workout->load(['student:id,name', 'creator:id,name']),
                 'message' => 'Treino criado com sucesso',
             ], 201);
-
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erro de validação',
-                'errors' => $e->errors(),
-            ], 422);
 
         } catch (\Exception $e) {
             Log::channel('workouts')->error('Workout creation failed', [
@@ -126,28 +105,14 @@ class WorkoutController extends Controller
     /**
      * Update workout.
      *
-     * @param Request $request
+     * @param UpdateWorkoutRequest $request
      * @param Workout $workout
      * @return JsonResponse
      */
-    public function update(Request $request, Workout $workout): JsonResponse
+    public function update(UpdateWorkoutRequest $request, Workout $workout): JsonResponse
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'student_id' => 'sometimes|required|exists:students,id',
-                'name' => 'sometimes|required|string|max:255',
-                'description' => 'nullable|string',
-                'category' => 'sometimes|required|in:strength,cardio,flexibility,mixed',
-                'starts_at' => 'nullable|date',
-                'ends_at' => 'nullable|date|after:starts_at',
-                'is_active' => 'sometimes|boolean',
-            ]);
-
-            if ($validator->fails()) {
-                throw new ValidationException($validator);
-            }
-
-            $workout->update($request->all());
+            $workout->update($request->validated());
 
             Log::channel('workouts')->info('Workout updated', [
                 'workout_id' => $workout->id,
@@ -158,13 +123,6 @@ class WorkoutController extends Controller
                 'data' => $workout->fresh()->load(['student:id,name', 'creator:id,name', 'exercises']),
                 'message' => 'Treino atualizado com sucesso',
             ]);
-
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erro de validação',
-                'errors' => $e->errors(),
-            ], 422);
 
         } catch (\Exception $e) {
             Log::channel('workouts')->error('Workout update failed', [

@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Exercise\StoreExerciseRequest;
+use App\Http\Requests\Exercise\UpdateExerciseRequest;
 use App\Models\Exercise;
 use App\Models\Workout;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 /**
  * ExerciseController
@@ -21,39 +20,23 @@ class ExerciseController extends Controller
     /**
      * Create a new exercise for a workout.
      *
-     * @param Request $request
+     * @param StoreExerciseRequest $request
      * @param Workout $workout
      * @return JsonResponse
      */
-    public function store(Request $request, Workout $workout): JsonResponse
+    public function store(StoreExerciseRequest $request, Workout $workout): JsonResponse
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'name' => 'required|string|max:255',
-                'muscle_group' => 'nullable|string|max:255',
-                'description' => 'nullable|string',
-                'video_url' => 'nullable|url',
-                'sets' => 'required|integer|min:1|max:20',
-                'reps' => 'required|string|max:50',
-                'rest' => 'required|string|max:50',
-                'load' => 'nullable|string|max:50',
-                'tempo' => 'nullable|string|max:50',
-                'notes' => 'nullable|string',
-                'order' => 'sometimes|integer|min:0',
-            ]);
-
-            if ($validator->fails()) {
-                throw new ValidationException($validator);
-            }
+            $data = $request->validated();
 
             // Get the next order number if not provided
-            if (!$request->has('order')) {
+            if (!isset($data['order'])) {
                 $maxOrder = Exercise::where('workout_id', $workout->id)->max('order');
-                $request->merge(['order' => ($maxOrder ?? -1) + 1]);
+                $data['order'] = ($maxOrder ?? -1) + 1;
             }
 
             $exercise = Exercise::create([
-                ...$request->all(),
+                ...$data,
                 'workout_id' => $workout->id,
             ]);
 
@@ -67,13 +50,6 @@ class ExerciseController extends Controller
                 'data' => $exercise,
                 'message' => 'Exercício criado com sucesso',
             ], 201);
-
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erro de validação',
-                'errors' => $e->errors(),
-            ], 422);
 
         } catch (\Exception $e) {
             Log::channel('workouts')->error('Exercise creation failed', [
@@ -90,32 +66,14 @@ class ExerciseController extends Controller
     /**
      * Update exercise.
      *
-     * @param Request $request
+     * @param UpdateExerciseRequest $request
      * @param Exercise $exercise
      * @return JsonResponse
      */
-    public function update(Request $request, Exercise $exercise): JsonResponse
+    public function update(UpdateExerciseRequest $request, Exercise $exercise): JsonResponse
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'name' => 'sometimes|required|string|max:255',
-                'muscle_group' => 'nullable|string|max:255',
-                'description' => 'nullable|string',
-                'video_url' => 'nullable|url',
-                'sets' => 'sometimes|required|integer|min:1|max:20',
-                'reps' => 'sometimes|required|string|max:50',
-                'rest' => 'sometimes|required|string|max:50',
-                'load' => 'nullable|string|max:50',
-                'tempo' => 'nullable|string|max:50',
-                'notes' => 'nullable|string',
-                'order' => 'sometimes|integer|min:0',
-            ]);
-
-            if ($validator->fails()) {
-                throw new ValidationException($validator);
-            }
-
-            $exercise->update($request->all());
+            $exercise->update($request->validated());
 
             Log::channel('workouts')->info('Exercise updated', [
                 'exercise_id' => $exercise->id,
@@ -126,13 +84,6 @@ class ExerciseController extends Controller
                 'data' => $exercise->fresh(),
                 'message' => 'Exercício atualizado com sucesso',
             ]);
-
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erro de validação',
-                'errors' => $e->errors(),
-            ], 422);
 
         } catch (\Exception $e) {
             Log::channel('workouts')->error('Exercise update failed', [

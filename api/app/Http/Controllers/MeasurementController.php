@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Measurement\StoreMeasurementRequest;
 use App\Models\Student;
 use App\Models\StudentMeasurement;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
 
 /**
  * MeasurementController
@@ -39,36 +37,15 @@ class MeasurementController extends Controller
     /**
      * Create a new measurement for a student.
      *
-     * @param Request $request
+     * @param StoreMeasurementRequest $request
      * @param Student $student
      * @return JsonResponse
      */
-    public function store(Request $request, Student $student): JsonResponse
+    public function store(StoreMeasurementRequest $request, Student $student): JsonResponse
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'weight' => 'required|numeric|min:1|max:999.99',
-                'body_fat' => 'nullable|numeric|min:0|max:100',
-                'muscle_mass' => 'nullable|numeric|min:0|max:999.99',
-                'chest' => 'nullable|numeric|min:0|max:999.99',
-                'waist' => 'nullable|numeric|min:0|max:999.99',
-                'hips' => 'nullable|numeric|min:0|max:999.99',
-                'right_arm' => 'nullable|numeric|min:0|max:999.99',
-                'left_arm' => 'nullable|numeric|min:0|max:999.99',
-                'right_thigh' => 'nullable|numeric|min:0|max:999.99',
-                'left_thigh' => 'nullable|numeric|min:0|max:999.99',
-                'right_calf' => 'nullable|numeric|min:0|max:999.99',
-                'left_calf' => 'nullable|numeric|min:0|max:999.99',
-                'notes' => 'nullable|string',
-                'measured_at' => 'required|date',
-            ]);
-
-            if ($validator->fails()) {
-                throw new ValidationException($validator);
-            }
-
             $measurement = StudentMeasurement::create([
-                ...$request->all(),
+                ...$request->validated(),
                 'student_id' => $student->id,
             ]);
 
@@ -82,13 +59,6 @@ class MeasurementController extends Controller
                 'data' => $measurement,
                 'message' => 'Avaliação física registrada com sucesso',
             ], 201);
-
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Erro de validação',
-                'errors' => $e->errors(),
-            ], 422);
 
         } catch (\Exception $e) {
             Log::channel('students')->error('Measurement creation failed', [
