@@ -9,8 +9,8 @@ import {
   Alert,
   Switch,
   Platform,
-  SafeAreaView,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useForm, Controller } from 'react-hook-form';
@@ -24,7 +24,7 @@ import type { StudentFormData } from '../../types/student';
 // Schema de validação
 const studentSchema = z.object({
   name: z.string().min(3, 'Mínimo 3 caracteres').max(255, 'Máximo 255 caracteres'),
-  email: z.string().email('Email inválido'),
+  email: z.email('Email inválido'),
   phone: z.string().optional().nullable(),
   birth_date: z.date().optional().nullable(),
   gender: z.enum(['male', 'female', 'other']).optional().nullable(),

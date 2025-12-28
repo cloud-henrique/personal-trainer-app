@@ -14,6 +14,11 @@ import StudentDetailScreen from '../screens/trainer/StudentDetailScreen';
 import StudentFormScreen from '../screens/trainer/StudentFormScreen';
 
 // Type definitions for navigation
+export type AuthStackParamList = {
+  Login: undefined;
+  Register: undefined;
+};
+
 export type AppStackParamList = {
   Dashboard: undefined;
   StudentList: undefined;
@@ -21,7 +26,8 @@ export type AppStackParamList = {
   StudentForm: { studentId?: number; mode: 'create' | 'edit' };
 };
 
-const Stack = createNativeStackNavigator<AppStackParamList>();
+const AuthStack = createNativeStackNavigator<AuthStackParamList>();
+const AppStack = createNativeStackNavigator<AppStackParamList>();
 
 export default function AppNavigator() {
   const { isAuthenticated } = useAuthStore();
@@ -30,18 +36,18 @@ export default function AppNavigator() {
     <NavigationContainer>
       {!isAuthenticated ? (
         // Auth Stack
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='Login' component={LoginScreen} />
-          <Stack.Screen name='Register' component={RegisterScreen} />
-        </Stack.Navigator>
+        <AuthStack.Navigator screenOptions={{ headerShown: false }}>
+          <AuthStack.Screen name='Login' component={LoginScreen} />
+          <AuthStack.Screen name='Register' component={RegisterScreen} />
+        </AuthStack.Navigator>
       ) : (
         // Authenticated Stack
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name='Dashboard' component={DashboardScreen} />
-          <Stack.Screen name='StudentList' component={StudentListScreen} />
-          <Stack.Screen name='StudentDetail' component={StudentDetailScreen} />
-          <Stack.Screen name='StudentForm' component={StudentFormScreen} />
-        </Stack.Navigator>
+        <AppStack.Navigator screenOptions={{ headerShown: false }}>
+          <AppStack.Screen name='Dashboard' component={DashboardScreen} />
+          <AppStack.Screen name='StudentList' component={StudentListScreen} />
+          <AppStack.Screen name='StudentDetail' component={StudentDetailScreen} />
+          <AppStack.Screen name='StudentForm' component={StudentFormScreen} />
+        </AppStack.Navigator>
       )}
     </NavigationContainer>
   );
