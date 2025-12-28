@@ -5,6 +5,7 @@ Aplicação SaaS multi-tenant para personal trainers gerenciarem clientes, trein
 ## 🎯 Status do Projeto
 
 ### ✅ Backend (Laravel 12) - COMPLETO
+
 - [x] Multi-tenancy simplificado (BelongsToTenant trait)
 - [x] 13 tabelas migradas (tenants, users, students, workouts, etc)
 - [x] 10 Models com relacionamentos
@@ -18,6 +19,7 @@ Aplicação SaaS multi-tenant para personal trainers gerenciarem clientes, trein
 - [x] API Resources (transformers de response)
 
 ### ✅ Mobile (React Native + Expo) - FUNDAÇÃO COMPLETA
+
 - [x] Estrutura Expo SDK 52 + TypeScript
 - [x] NativeWind 4 (Tailwind CSS)
 - [x] Zustand stores com AsyncStorage (auth, theme)
@@ -29,6 +31,7 @@ Aplicação SaaS multi-tenant para personal trainers gerenciarem clientes, trein
 - [x] Tema dinâmico por tenant
 
 ### 🚧 Próximos Passos
+
 - [ ] CRUD de Alunos (mobile)
 - [ ] CRUD de Treinos (mobile)
 - [ ] Medições e Gráficos (mobile)
@@ -108,11 +111,13 @@ npm run android  # Android
 ## 🔑 Credenciais de Teste
 
 ### Tenant 1 - Academia Fitness Pro
+
 - **Email:** carlos@fitnesspro.com
 - **Senha:** password123
 - **Cor primária:** #FF6B6B
 
 ### Tenant 2 - Personal Strong
+
 - **Email:** ana@personalstrong.com
 - **Senha:** password123
 - **Cor primária:** #4ECDC4
@@ -152,12 +157,14 @@ const { theme } = useThemeStore();
 ## 📡 API Endpoints
 
 ### Autenticação (Públicas)
+
 ```
 POST /api/v1/auth/register   # Criar tenant + personal
 POST /api/v1/auth/login      # Login
 ```
 
 ### Protegidas (auth:sanctum)
+
 ```
 POST   /api/v1/auth/logout
 GET    /api/v1/auth/me
@@ -195,6 +202,7 @@ DELETE /api/v1/goals/{id}
 ## 🗄️ Banco de Dados
 
 ### Tabelas Principais
+
 - `tenants` - Personal trainers (UUID primary key)
 - `users` - Admins/Trainers do tenant
 - `students` - Alunos do personal
@@ -210,6 +218,7 @@ DELETE /api/v1/goals/{id}
 ## 🎨 Stack Tecnológica
 
 ### Backend
+
 - Laravel 12
 - Laravel Sanctum (auth)
 - MySQL/MariaDB
@@ -217,6 +226,7 @@ DELETE /api/v1/goals/{id}
 - PHP 8.3
 
 ### Mobile
+
 - React Native
 - Expo SDK 52
 - TypeScript (strict)
@@ -229,6 +239,7 @@ DELETE /api/v1/goals/{id}
 ## 📱 Features Implementadas
 
 ### Backend
+
 ✅ Sistema multi-tenant com isolamento por tenant_id
 ✅ Autenticação JWT com Sanctum
 ✅ CRUD completo de Students, Workouts, Exercises, Measurements, Goals
@@ -240,6 +251,7 @@ DELETE /api/v1/goals/{id}
 ✅ Respostas padronizadas com API Resources
 
 ### Mobile
+
 ✅ Login/Registro com tema dinâmico
 ✅ Persistência de autenticação
 ✅ Navegação Auth/App
@@ -250,19 +262,23 @@ DELETE /api/v1/goals/{id}
 ## 🔜 Próximos Passos
 
 1. **Mobile - Lista de Alunos**
+
    - StudentListScreen
    - StudentService com React Query
    - Card component
 
 2. **Mobile - Detalhes do Aluno**
+
    - StudentDetailScreen
    - Tabs (Info, Medições, Treinos, Metas)
 
 3. **Mobile - Criar Treino**
+
    - WorkoutFormScreen
    - ExerciseList component
 
 4. **Backend - Validações**
+
    - Form Requests estruturados
    - API Resources para responses
 
@@ -273,6 +289,7 @@ DELETE /api/v1/goals/{id}
 ## 📚 Documentação
 
 Ver [CLAUDE.md](./CLAUDE.md) para:
+
 - Arquitetura detalhada
 - Regras de negócio
 - Breaking changes do Laravel 12

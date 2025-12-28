@@ -11,6 +11,7 @@ Este é um **MVP** focado em funcionalidades essenciais, sem over-engineering, m
 ## STACK TECNOLÓGICA
 
 ### Backend (API)
+
 - **Laravel 12** (versão mais recente - ATENÇÃO às breaking changes da v11→v12)
 - **Multi-tenancy**: Pacote `stancl/tenancy` (arquitetura database-per-tenant)
 - **Autenticação**: Laravel Sanctum (token-based para mobile)
@@ -19,6 +20,7 @@ Este é um **MVP** focado em funcionalidades essenciais, sem over-engineering, m
 - **Logs**: Laravel Log com channels por model, retenção de 7 dias
 
 ### Frontend (Mobile)
+
 - **React Native** com **Expo SDK 52**
 - **Expo EAS Update** (atualizações OTA para iteração rápida)
 - **UI**: NativeWind 4.x (Tailwind CSS para React Native)
@@ -29,11 +31,13 @@ Este é um **MVP** focado em funcionalidades essenciais, sem over-engineering, m
 - **Offline-first**: TanStack Query com cache persistente + fila de mutações
 
 ### Código Compartilhado
+
 - **TypeScript** types compartilhados entre API e mobile (pasta `/shared`)
 - Schemas de validação Zod compartilhados para consistência
 - Constantes de rotas da API
 
 ### Ambiente de Desenvolvimento
+
 - **OS**: macOS (Apple Silicon M3)
 - **Servidor Local**: XAMPP (Apache + MariaDB + PHP)
 - **Gerenciador de Banco**: phpMyAdmin
@@ -44,6 +48,7 @@ Este é um **MVP** focado em funcionalidades essenciais, sem over-engineering, m
 ## ARQUITETURA DO BANCO DE DADOS
 
 ### Banco Central (`personal_trainer`)
+
 Gerencia os tenants e configurações globais:
 
 ```sql
@@ -76,6 +81,7 @@ domains (
 ```
 
 ### Bancos dos Tenants (`tenant_{uuid}`)
+
 Cada personal trainer tem banco isolado com:
 
 ```sql
@@ -299,6 +305,7 @@ personal-trainer-app/
 ### ⚠️ CRÍTICO: Mudanças obrigatórias
 
 #### 1. Bootstrap (`bootstrap/app.php`)
+
 Laravel 12 removeu `app/Http/Kernel.php`:
 
 ```php
@@ -317,21 +324,22 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->use([
             \Illuminate\Http\Middleware\HandleCors::class,
         ]);
-        
+
         $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
         ]);
-        
+
         $middleware->alias([
             'tenant' => \Stancl\Tenancy\Middleware\InitializeTenancyByDomain::class,
         ]);
-        
+
         $middleware->validateCsrfTokens(except: ['api/*']);
     })
     ->create();
 ```
 
 #### 2. CORS (`config/cors.php`)
+
 ```php
 return [
     'paths' => ['api/*', 'sanctum/csrf-cookie'],
@@ -341,6 +349,7 @@ return [
 ```
 
 #### 3. .env
+
 ```ini
 DB_SOCKET=/Applications/XAMPP/xamppfiles/var/mysql/mysql.sock
 CORS_ALLOWED_ORIGINS=http://localhost:8081
@@ -352,12 +361,13 @@ TENANCY_DATABASE_PREFIX=tenant
 ## REGRAS DE NEGÓCIO
 
 ### Autenticação e Permissões
-1. **Personal Trainers**: 
+
+1. **Personal Trainers**:
    - Se cadastram com auto-registro (plano free)
    - Criam novo tenant automaticamente
    - Têm role `admin` em seu tenant
-   
 2. **Alunos**:
+
    - São cadastrados pelo personal (não podem se auto-registrar)
    - Recebem email com credenciais de acesso
    - Têm role `student` no tenant
@@ -368,14 +378,17 @@ TENANCY_DATABASE_PREFIX=tenant
    - Não implementar interface para isso no MVP
 
 ### Planos
+
 - **free**: Padrão no registro
 - **basic/premium**: Futura implementação com Asaas (gateway de pagamento)
 
 ### Notificações Push
+
 - Enviar quando personal criar novo treino para aluno
 - Usar Expo Push Notifications
 
 ### Offline-first
+
 - App mobile deve funcionar offline
 - Sincronizar mutações quando voltar online
 - TanStack Query com cache persistente
@@ -385,6 +398,7 @@ TENANCY_DATABASE_PREFIX=tenant
 ## ROTAS DA API
 
 ### Autenticação
+
 ```
 POST   /api/v1/auth/register          # Criar tenant + personal
 POST   /api/v1/auth/login             # Login
@@ -393,6 +407,7 @@ GET    /api/v1/auth/me                # Usuário atual
 ```
 
 ### Alunos (`auth:sanctum`)
+
 ```
 GET    /api/v1/students               # Listar
 POST   /api/v1/students               # Criar (envia email)
@@ -402,6 +417,7 @@ DELETE /api/v1/students/{id}          # Deletar
 ```
 
 ### Medições (`auth:sanctum`)
+
 ```
 GET    /api/v1/students/{id}/measurements
 POST   /api/v1/students/{id}/measurements
@@ -410,6 +426,7 @@ GET    /api/v1/students/{id}/measurements/graph
 ```
 
 ### Treinos (`auth:sanctum`)
+
 ```
 GET    /api/v1/students/{id}/workouts
 POST   /api/v1/students/{id}/workouts
@@ -419,6 +436,7 @@ DELETE /api/v1/workouts/{id}
 ```
 
 ### Exercícios (`auth:sanctum`)
+
 ```
 POST   /api/v1/workouts/{id}/exercises
 PUT    /api/v1/exercises/{id}
@@ -426,12 +444,14 @@ DELETE /api/v1/exercises/{id}
 ```
 
 ### Logs de Treino (`auth:sanctum`)
+
 ```
 GET    /api/v1/students/{id}/workout-logs
 POST   /api/v1/workout-logs
 ```
 
 ### Metas (`auth:sanctum`)
+
 ```
 GET    /api/v1/students/{id}/goals
 POST   /api/v1/students/{id}/goals
@@ -440,6 +460,7 @@ DELETE /api/v1/goals/{id}
 ```
 
 ### Dashboard (`auth:sanctum`)
+
 ```
 GET    /api/v1/dashboard/stats
 GET    /api/v1/dashboard/recent-activity
@@ -450,6 +471,7 @@ GET    /api/v1/dashboard/recent-activity
 ## FORMATO DE RESPOSTA
 
 ### Sucesso
+
 ```json
 {
   "success": true,
@@ -459,6 +481,7 @@ GET    /api/v1/dashboard/recent-activity
 ```
 
 ### Erro de Validação
+
 ```json
 {
   "success": false,
@@ -470,6 +493,7 @@ GET    /api/v1/dashboard/recent-activity
 ```
 
 ### Erro Geral
+
 ```json
 {
   "success": false,
@@ -485,7 +509,7 @@ GET    /api/v1/dashboard/recent-activity
 2. Backend valida dados
 3. Cria registro na tabela `tenants` (banco central)
 4. Cria domínio: `{slug}.localhost` (dev) ou `{slug}.app.com` (prod)
-5. Cria banco `tenant_{uuid}` 
+5. Cria banco `tenant_{uuid}`
 6. Roda migrations no banco do tenant
 7. Cria usuário admin no banco do tenant
 8. Retorna token + user + tenant
@@ -506,6 +530,7 @@ GET    /api/v1/dashboard/recent-activity
 ## TEMA DINÂMICO (MOBILE)
 
 Cada tenant tem:
+
 - `primary_color` (cor primária do app)
 - `logo_url` (logo exibido no login/header)
 - `cover_url` (imagem de capa do login)
@@ -532,6 +557,7 @@ const { theme } = useThemeStore()
 ## OFFLINE-FIRST (MOBILE)
 
 ### Cache Persistente (React Query)
+
 ```typescript
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -540,28 +566,29 @@ const queryClient = new QueryClient({
       staleTime: 1000 * 60 * 5, // 5min
     },
   },
-})
+});
 
 const persister = createAsyncStoragePersister({
   storage: AsyncStorage,
-})
+});
 ```
 
 ### Fila de Mutações
+
 ```typescript
 // stores/offlineStore.ts
 interface PendingMutation {
-  id: string
-  endpoint: string
-  method: 'POST' | 'PUT' | 'DELETE'
-  data: any
+  id: string;
+  endpoint: string;
+  method: 'POST' | 'PUT' | 'DELETE';
+  data: any;
 }
 
 // Quando offline, adicionar à fila
-addPendingMutation({ endpoint: '/students', method: 'POST', data })
+addPendingMutation({ endpoint: '/students', method: 'POST', data });
 
 // Quando voltar online, sincronizar
-syncPendingMutations()
+syncPendingMutations();
 ```
 
 ---
@@ -569,17 +596,19 @@ syncPendingMutations()
 ## PUSH NOTIFICATIONS
 
 ### Setup (Mobile)
+
 ```typescript
-import * as Notifications from 'expo-notifications'
+import * as Notifications from 'expo-notifications';
 
 // Solicitar permissão
-const token = await registerForPushNotifications()
+const token = await registerForPushNotifications();
 
 // Enviar token para backend
-api.post('/users/push-token', { token })
+api.post('/users/push-token', { token });
 ```
 
 ### Envio (Backend)
+
 ```php
 // app/Services/NotificationService.php
 public function sendWorkoutNotification($student, $workout)
@@ -597,6 +626,7 @@ public function sendWorkoutNotification($student, $workout)
 ## DEPLOY VPS HOSTINGER
 
 ### Estrutura
+
 ```
 /var/www/personal-trainer/
 ├── api/
@@ -606,16 +636,17 @@ public function sendWorkoutNotification($student, $workout)
 ```
 
 ### Nginx Config
+
 ```nginx
 server {
     listen 80;
     server_name api.seudominio.com;
     root /var/www/personal-trainer/api/public;
-    
+
     location / {
         try_files $uri /index.php?$query_string;
     }
-    
+
     location ~ \.php$ {
         fastcgi_pass unix:/var/run/php/php8.3-fpm.sock;
         include fastcgi_params;
@@ -624,11 +655,13 @@ server {
 ```
 
 ### SSL
+
 ```bash
 certbot --nginx -d api.seudominio.com
 ```
 
 ### Permissões
+
 ```bash
 chown -R www-data:www-data /var/www/personal-trainer
 chmod -R 755 /var/www/personal-trainer
@@ -640,6 +673,7 @@ chmod -R 775 /var/www/personal-trainer/api/storage
 ## LOGS
 
 ### Configuração (`config/logging.php`)
+
 ```php
 'channels' => [
     'students' => [
@@ -656,6 +690,7 @@ chmod -R 775 /var/www/personal-trainer/api/storage
 ```
 
 ### Uso
+
 ```php
 Log::channel('students')->info('Student created', [
     'student_id' => $student->id,
@@ -668,6 +703,7 @@ Log::channel('students')->info('Student created', [
 ## PADRÕES DE CÓDIGO
 
 ### PHP
+
 - PSR-12
 - Type hints obrigatórios
 - Form Requests para validação
@@ -675,6 +711,7 @@ Log::channel('students')->info('Student created', [
 - snake_case (variáveis, BD)
 
 ### TypeScript
+
 - Functional components
 - Strict mode
 - Custom hooks
@@ -682,6 +719,7 @@ Log::channel('students')->info('Student created', [
 - PascalCase (componentes)
 
 ### Commits
+
 ```
 feat: adiciona endpoint de criação de treino
 fix: corrige erro ao deletar aluno
@@ -693,6 +731,7 @@ docs: atualiza README
 ## PRIORIDADES DO MVP
 
 ### Backend (Alta Prioridade)
+
 1. ✅ Multi-tenancy configurado (BelongsToTenant trait)
 2. ✅ Migrations completas (13 tabelas)
 3. ✅ Models com relacionamentos (10 models)
@@ -704,6 +743,7 @@ docs: atualiza README
 9. ✅ API Resources (transformers de response)
 
 ### Mobile (Alta Prioridade)
+
 1. ✅ Estrutura base (Expo + NativeWind 4)
 2. ✅ Tema dinâmico (Zustand com persistência)
 3. ✅ Auth flow (Login/Register com React Query)
@@ -716,6 +756,7 @@ docs: atualiza README
 10. [ ] Visualizar treino (aluno)
 
 ### Futuro (Baixa Prioridade)
+
 - Sistema de pagamento (Asaas)
 - Gráficos avançados
 - Chat trainer-aluno
@@ -727,6 +768,7 @@ docs: atualiza README
 ## COMANDOS ÚTEIS
 
 ### Backend (Dev)
+
 ```bash
 cd api
 php artisan serve
@@ -735,6 +777,7 @@ php artisan tinker
 ```
 
 ### Mobile (Dev)
+
 ```bash
 cd mobile
 npm start
@@ -742,6 +785,7 @@ npx expo start --clear
 ```
 
 ### Deploy (EAS)
+
 ```bash
 eas update --branch production
 eas build --platform all
