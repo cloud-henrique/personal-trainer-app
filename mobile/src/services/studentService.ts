@@ -17,24 +17,12 @@ const fetchStudent = async (id: number): Promise<Student> => {
 };
 
 const createStudent = async (studentData: StudentFormData): Promise<Student> => {
-  // Converter Date para string no formato dd/mm/yyyy se necessário
-  const formattedData = {
-    ...studentData,
-    birth_date: studentData.birth_date ? formatDateToBR(studentData.birth_date) : null,
-  };
-
-  const { data } = await api.post<ApiResponse<Student>>('/students', formattedData);
+  const { data } = await api.post<ApiResponse<Student>>('/students', studentData);
   return data.data!;
 };
 
 const updateStudent = async (id: number, studentData: StudentFormData): Promise<Student> => {
-  // Converter Date para string no formato dd/mm/yyyy se necessário
-  const formattedData = {
-    ...studentData,
-    birth_date: studentData.birth_date ? formatDateToBR(studentData.birth_date) : null,
-  };
-
-  const { data } = await api.put<ApiResponse<Student>>(`/students/${id}`, formattedData);
+  const { data } = await api.put<ApiResponse<Student>>(`/students/${id}`, studentData);
   return data.data!;
 };
 
@@ -45,13 +33,6 @@ const deleteStudent = async (id: number): Promise<void> => {
 // ========================================
 // Helper Functions
 // ========================================
-
-const formatDateToBR = (date: Date): string => {
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
-};
 
 export const parseBRDate = (dateString: string): Date | null => {
   if (!dateString) return null;

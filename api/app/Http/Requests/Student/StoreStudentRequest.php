@@ -28,7 +28,9 @@ class StoreStudentRequest extends FormRequest
                 'required',
                 'email',
                 'max:255',
-                Rule::unique('students')->where('tenant_id', tenant('id')),
+                Rule::unique('students')->where(function ($query) {
+                    return $query->where('tenant_id', auth()->user()->tenant_id);
+                }),
             ],
             'phone' => 'nullable|string|max:20',
             'birth_date' => 'nullable|date|before:today',
